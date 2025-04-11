@@ -23,7 +23,7 @@ mongoose.connect(process.env.MONGO_URI, {
 // Serve static frontend files
 app.use(express.static(path.join(__dirname, 'frontend')));
 
-// Routes
+// API routes
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/profile', require('./routes/profile'));
 app.use('/api/challenges', require('./routes/challenges'));
@@ -32,12 +32,12 @@ app.use('/api/compiler', require('./routes/compiler'));
 app.use('/api/bepo', require('./routes/bepo'));
 app.use('/api/payment', require('./routes/payment'));
 
-// Catch-all to serve frontend index.html for all non-API routes
-app.get('/:path(*)', (req, res) => {
+// Fallback route for frontend (SPA routing)
+app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'frontend', 'index.html'));
 });
 
-// Start server
+// Start the server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
