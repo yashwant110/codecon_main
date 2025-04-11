@@ -1,8 +1,4 @@
 {
-<<<<<<< HEAD
-  "dependencies": {
-    "cors": "^2.8.5"
-=======
   "name": "codecon-backend",
   "version": "1.0.0",
   "main": "app.js",
@@ -15,11 +11,11 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "cors": "^2.8.5",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.13.2",
     "nodemailer": "^6.10.0"
->>>>>>> e5de7613565f5470a681433ca3e5dc64253f9945
   }
 }
