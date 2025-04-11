@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>CodeCon - Compiler</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #0f0f0f;
+      color: #fff;
+    }
+
+    nav {
+      background: #000;
+      padding: 15px 25px;
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid #00ffc8;
+    }
+
+    nav .nav-links {
+      display: flex;
+      gap: 20px;
+    }
+
+    nav .nav-links a {
+      color: #00ffc8;
+      text-decoration: none;
+      font-weight: bold;
+      transition: color 0.3s ease;
+    }
+
+    nav .nav-links a:hover {
+      color: #ffffff;
+    }
+
+    .login-btn {
+      margin-left: auto;
+      background: #00ffc8;
+      color: #000;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-weight: bold;
+      text-decoration: none;
+      transition: background 0.3s ease;
+    }
+
+    .login-btn:hover {
+      background: #00cfa0;
+    }
+
+    .compiler-container {
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    select, textarea, button {
+      font-family: inherit;
+      font-size: 16px;
+    }
+
+    select {
+      padding: 10px;
+      background: #000;
+      color: #00ffc8;
+      border: 1px solid #00ffc8;
+      border-radius: 8px;
+    }
+
+    textarea {
+      width: 100%;
+      height: 320px;
+      background: #121212;
+      color: #00ffc8;
+      border: 1px solid #00ffc8;
+      border-radius: 10px;
+      padding: 15px;
+      resize: vertical;
+    }
+
+    #output {
+      height: 200px;
+      white-space: pre-wrap;
+    }
+
+    button {
+      padding: 10px 20px;
+      background: #00ffc8;
+      border: none;
+      color: black;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #00cfa0;
+    }
+
+    /* AI Assistant */
+    .ai-assistant {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 999;
+      display: flex;
+      align-items: flex-end;
+      gap: 15px;
+    }
+
+    .ai-icon {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      background-image: url('image.png');
+      background-size: cover;
+      background-position: center;
+      position: relative;
+      box-shadow: inset 0 0 8px #00ffc8, 0 0 15px rgba(0, 255, 200, 0.3);
+      cursor: pointer;
+    }
+
+    .eye-container {
+      position: absolute;
+      top: 26%;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 12px;
+    }
+
+    .eye {
+      width: 12px;
+      height: 12px;
+      background-color: #000;
+      border: 2px solid #00ffc8;
+      border-radius: 50%;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .pupil {
+      width: 6px;
+      height: 6px;
+      background: #00ffc8;
+      border-radius: 50%;
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      transition: all 0.1s ease-out;
+    }
+
+    .smile {
+      position: absolute;
+      bottom: 18%;
+      left: 50%;
+      width: 24px;
+      height: 10px;
+      border-bottom: 2px solid #00ffc8;
+      border-radius: 0 0 50px 50px;
+      transform: translateX(-50%);
+      opacity: 0.6;
+    }
+
+    .ai-chatbox {
+      display: none;
+      flex-direction: column;
+      background: rgba(0, 0, 0, 0.95);
+      border: 1px solid #00ffc8;
+      border-radius: 12px;
+      padding: 14px;
+      width: 240px;
+      box-shadow: 0 0 20px rgba(0, 255, 200, 0.15);
+      font-size: 14px;
+      color: #d0f0c0;
+    }
+
+    .ai-chatbox textarea {
+      width: 100%;
+      height: 60px;
+      margin-top: 10px;
+      border-radius: 8px;
+      padding: 8px;
+      background: #000;
+      color: #00ffc8;
+      border: 1px solid #00ffc8;
+      resize: none;
+    }
+
+    .ai-chatbox button {
+      margin-top: 10px;
+      padding: 8px;
+      background: #00ffc8;
+      border: none;
+      color: black;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .ai-chatbox button:hover {
+      background: #00cfa0;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="challenges.html">Challenges</a>
+      <a href="compiler.html">Compiler</a>
+      <a href="courses.html">Courses</a>
+      <a href="subscription.html">Subscription</a>
+      <a href="profile.html">Profile</a>
+    </div>
+    <a class="login-btn" href="login.html">Login</a>
+  </nav>
+
+  <div class="compiler-container">
+    <select id="language">
+      <option value="cpp">C++</option>
+      <option value="python">Python</option>
+      <option value="java">Java</option>
+      <option value="c">C</option>
+      <option value="javascript">JavaScript</option>
+    </select>
+
+    <textarea id="code" placeholder="Write your code here..."></textarea>
+    <button onclick="runCode()">Run Code</button>
+    <textarea id="output" readonly placeholder="Output will appear here..."></textarea>
+  </div>
+
+  <!-- AI Assistant -->
+  <div class="ai-assistant">
+    <div class="ai-chatbox" id="bepo-chat">
+      <p><strong>Bepo:</strong> Ask me about your weak areas, and I’ll recommend challenges & courses!</p>
+      <textarea placeholder="Ask me anything..."></textarea>
+      <button id="ask-bepo">Ask Bepo</button>
+    </div>
+    <div class="ai-icon" id="bepo-icon" title="Talk to Bepo">
+      <div class="eye-container">
+        <div class="eye"><div class="pupil"></div></div>
+        <div class="eye"><div class="pupil"></div></div>
+      </div>
+      <div class="smile"></div>
+    </div>
+  </div>
+
+  <script>
+    async function runCode() {
+      const language = document.getElementById("language").value;
+      const code = document.getElementById("code").value;
+      const output = document.getElementById("output");
+      output.value = "Running...";
+
+      try {
+        const res = await fetch("https://codec-tek5.onrender.com/api/compiler/run", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ language, code })
+        });
+
+        const data = await res.json();
+        output.value = data.output || "No output.";
+      } catch (err) {
+        output.value = "Error occurred. Please try again.";
+      }
+    }
+
+    const bepoIcon = document.getElementById('bepo-icon');
+    const bepoChat = document.getElementById('bepo-chat');
+    const askButton = document.getElementById('ask-bepo');
+    const textarea = document.querySelector('.ai-chatbox textarea');
+    const pupils = document.querySelectorAll('.pupil');
+
+    bepoIcon.addEventListener('click', () => {
+      bepoChat.style.display = bepoChat.style.display === 'flex' ? 'none' : 'flex';
+    });
+
+    document.addEventListener('mousemove', (e) => {
+      const icon = bepoIcon.getBoundingClientRect();
+      const centerX = icon.left + icon.width / 2;
+      const centerY = icon.top + icon.height / 2;
+      const deltaX = (e.clientX - centerX) / 20;
+      const deltaY = (e.clientY - centerY) / 20;
+
+      pupils.forEach(pupil => {
+        pupil.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
+      });
+    });
+
+    askButton.addEventListener('click', async () => {
+      const userInput = textarea.value.trim();
+      if (!userInput) return;
+
+      try {
+        const res = await fetch('https://codec-tek5.onrender.com/api/bepo/ask', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ message: userInput })
+        });
+
+        const data = await res.json();
+        alert("Bepo says: " + data.reply);
+      } catch (err) {
+        alert("Something went wrong. Please try again later.");
+      }
+    });
+  </script>
+</body>
+</html>
