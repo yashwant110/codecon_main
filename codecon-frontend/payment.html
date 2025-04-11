@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CodeCon - Payment</title>
+  <style>
+    body {
+      background-color: #0d0d0d;
+      color: #00ffc8;
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .payment-card {
+      background: rgba(0, 0, 0, 0.85);
+      padding: 3rem;
+      border-radius: 2xl;
+      box-shadow: 0 0 20px #00ffc8;
+      text-align: center;
+      max-width: 400px;
+      width: 100%;
+      border: 2px solid #00ffc8;
+    }
+
+    .payment-card h1 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .payment-card p {
+      margin-bottom: 2rem;
+      font-size: 1.1rem;
+      color: #ccc;
+    }
+
+    .amount {
+      font-size: 24px;
+      margin-bottom: 1.5rem;
+      font-weight: bold;
+      color: #00ffc8;
+    }
+
+    .pay-btn {
+      padding: 0.75rem 2rem;
+      background-color: #00ffc8;
+      color: black;
+      border: none;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      border-radius: 10px;
+      transition: background 0.3s ease;
+    }
+
+    .pay-btn:hover {
+      background-color: #00e6b8;
+    }
+  </style>
+</head>
+<body>
+  <div class="payment-card">
+    <h1>Complete Your Payment</h1>
+    <p>You're one step away from unlocking premium features!</p>
+    <div class="amount">₹1000 (One-Time Payment)</div>
+    <button class="pay-btn" onclick="completePayment()">Proceed to Pay</button>
+  </div>
+
+  <script>
+    function completePayment() {
+      alert("This is a placeholder. You will be redirected to confirmation.");
+      window.location.href = "thank-you.html";
+    }
+  </script>
+</body>
+</html>
