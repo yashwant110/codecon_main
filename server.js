@@ -1,45 +1,49 @@
+// server.js
 const express = require('express');
 const mongoose = require('mongoose');
-const dotenv = require('dotenv');
-const cors = require('cors');
-const path = require('path');
+const dotenv  = require('dotenv');
+const cors    = require('cors');
+const path    = require('path');
 
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Middleware
+// ─── MIDDLEWARE ───────────────────────────────────────────────────────────────
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-// Connect to MongoDB
-mongoose.connect(process.env.MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
-.then(() => console.log('MongoDB connected'))
-.catch(err => console.error('MongoDB connection error:', err));
+// ─── DATABASE ─────────────────────────────────────────────────────────────────
+mongoose
+  .connect(process.env.MONGODB_URI, {
+    useNewUrlParser:    true,
+    useUnifiedTopology: true,
+  })
+  .then(() => console.log('✅ MongoDB connected'))
+  .catch(err => console.error('❌ MongoDB error:', err));
 
-// API routes
-app.use('/api/auth', require('./routes/auth'));
-app.use('/api/profile', require('./routes/profile'));
+// ─── API ROUTES ────────────────────────────────────────────────────────────────
+app.use('/api/auth',       require('./routes/auth'));
+app.use('/api/profile',    require('./routes/profile'));
 app.use('/api/challenges', require('./routes/challenges'));
-app.use('/api/courses', require('./routes/courses'));
-app.use('/api/compiler', require('./routes/compiler'));
-app.use('/api/bepo', require('./routes/bepo'));
-app.use('/api/payment', require('./routes/payment'));
+app.use('/api/courses',    require('./routes/courses'));
+app.use('/api/compiler',   require('./routes/compiler'));
+app.use('/api/bepo',       require('./routes/bepo'));
+app.use('/api/payment',    require('./routes/payment'));
 
-// Serve static frontend assets
+// ─── STATIC FRONTEND ──────────────────────────────────────────────────────────
+// Serve your built frontend files from /frontend
 app.use(express.static(path.join(__dirname, 'frontend')));
 
-// Catch-all to support client-side routing
-app.get('/:path(.*)', (req, res) => {
+// ─── SPA FALLBACK ─────────────────────────────────────────────────────────────
+// Use a simple '*' wildcard so path-to-regexp v6 doesn’t choke
+app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'frontend', 'index.html'));
 });
 
-// Start server
+// ─── START SERVER ─────────────────────────────────────────────────────────────
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(`🚀 Server running on port ${PORT}`);
 });
