@@ -1,8 +1,8 @@
 const User = require('./User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const sendEmail = require('./sendEmail');  // Ensure this is correct
-const otpGenerator = require('./otp-generator');  // Ensure the file exists
+const sendEmail = require('./sendEmail');
+const otpGenerator = require('otp-generator');
 
 const signup = async (req, res) => {
   const { email, password, name } = req.body;
@@ -51,4 +51,45 @@ const login = async (req, res) => {
   }
 };
 
-module.exports = { signup, login };
+const forgotPassword = async (req, res) => {
+  const { email } = req.body;
+  const otp = otpGenerator.generate(6, { upperCaseAlphabets: false, specialChars: false });
+
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(400).json({ msg: "User not found" });
+    }
+
+    // Send OTP to user's email
+    await sendEmail(email, otp);
+
+    return res.status(200).json({ msg: "OTP sent" });
+  } catch (error) {
+    res.status(500).json({ msg: "Server Error" });
+  }
+};
+
+const resetPassword = async (req, res) => {
+  const { token } = req.params;
+  const { newPassword } = req.body;
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await User.findById(decoded.id);
+
+    if (!user) {
+      return res.status(400).json({ msg: "User not found" });
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 12);
+    user.password = hashedPassword;
+    await user.save();
+
+    return res.status(200).json({ msg: "Password reset successfully" });
+  } catch (error) {
+    res.status(500).json({ msg: "Server Error" });
+  }
+};
+
+module.exports = { signup, login, forgotPassword, resetPassword };
