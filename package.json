@@ -16,7 +16,7 @@
     "razorpay": "^2.8.5",
     "dotenv": "^10.0.0",
     "otp-generator": "^2.1.0",
-    "sendgrid/mail": "^7.4.0"
+    "@sendgrid/mail": "^7.4.0"
   },
   "devDependencies": {
     "dotenv": "^10.0.0"
