@@ -1,11 +1,11 @@
 const express = require('express');
 const cors = require('cors');
-const authRoutes = require('./routes/authRoutes');
-const userRoutes = require('./routes/userRoutes');
-const challengeRoutes = require('./routes/challengeRoutes');
-const courseRoutes = require('./routes/courseRoutes');
-const paymentRoutes = require('./routes/paymentRoutes');
-const bepoRoutes = require('./routes/bepoRoutes');
+const authRoutes = require('./authRoutes');
+const userRoutes = require('./userRoutes');
+const challengeRoutes = require('./challengeRoutes');
+const courseRoutes = require('./courseRoutes');
+const paymentRoutes = require('./paymentRoutes');
+const bepoRoutes = require('./bepoRoutes');
 
 const app = express();
 
