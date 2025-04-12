@@ -1,5 +1,5 @@
 const Razorpay = require('razorpay');
-const Order = require('../models/Order');
+const Order = require('./Order');
 
 const razorpayInstance = new Razorpay({
   key_id: process.env.Razorpay_KEY_ID,
