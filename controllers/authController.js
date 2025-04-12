@@ -1,26 +1,54 @@
 const User = require('../models/User');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const sendEmail = require('../utils/sendEmail');
+const otpGenerator = require('../utils/otpGenerator');
 
-exports.signup = async (req, res) => {
+const signup = async (req, res) => {
+  const { email, password, name } = req.body;
   try {
-    const { email, password } = req.body;
-    const newUser = new User({ email, password });
-    await newUser.save();
-    res.status(201).json({ message: 'User registered successfully' });
-  } catch (err) {
-    res.status(400).json({ error: err.message });
-  }
-};
-
-exports.login = async (req, res) => {
-  try {
-    const { email, password } = req.body;
-    // Basic login logic
     const user = await User.findOne({ email });
-    if (!user || user.password !== password) {
-      return res.status(401).json({ error: 'Invalid credentials' });
+    if (user) {
+      return res.status(400).json({ msg: "User already exists" });
     }
-    res.status(200).json({ message: 'Login successful' });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
+
+    const hashedPassword = await bcrypt.hash(password, 12);
+
+    const newUser = new User({
+      name,
+      email,
+      password: hashedPassword
+    });
+
+    await newUser.save();
+
+    const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+    return res.status(201).json({ token });
+  } catch (error) {
+    res.status(500).json({ msg: "Server Error" });
   }
 };
+
+const login = async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(400).json({ msg: "User not found" });
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ msg: "Invalid credentials" });
+    }
+
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+    return res.status(200).json({ token });
+  } catch (error) {
+    res.status(500).json({ msg: "Server Error" });
+  }
+};
+
+module.exports = { signup, login };
