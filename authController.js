@@ -1,10 +1,8 @@
-const User = require('./User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const sendEmail = require('./sendEmail');
-const otpGenerator = require('otp-generator');
+const User = require('./User');  // Make sure this path is correct
+const sendEmail = require('./sendEmail');  // Correctly import sendEmail if needed
 
-// Signup Function
 const signup = async (req, res) => {
   const { email, password, name } = req.body;
   try {
@@ -31,7 +29,6 @@ const signup = async (req, res) => {
   }
 };
 
-// Login Function
 const login = async (req, res) => {
   const { email, password } = req.body;
   try {
@@ -53,4 +50,5 @@ const login = async (req, res) => {
   }
 };
 
+// Export functions
 module.exports = { signup, login };
