@@ -2,32 +2,28 @@
 
 const sgMail = require('@sendgrid/mail');
 
-// Set the API key from environment variable
+// Set SendGrid API Key from environment variable
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 /**
- * Sends an email using SendGrid
- * @param {string} to - recipient's email
- * @param {string} subject - email subject
- * @param {string} html - email body in HTML
+ * Send an email using SendGrid
+ * @param {string} to - Recipient email address
+ * @param {string} subject - Email subject
+ * @param {string} html - HTML content of the email
  */
-const sendEmail = async (to, subject, html) => {
+exports.sendEmail = async (to, subject, html) => {
   const msg = {
     to,
-    from: process.env.EMAIL_USER, // Must be verified sender on SendGrid
+    from: 'your_verified_sendgrid_email@example.com', // Must be a verified sender in SendGrid
     subject,
     html,
   };
 
   try {
     await sgMail.send(msg);
-    console.log('Email sent successfully to', to);
+    console.log('Email sent successfully');
   } catch (error) {
-    console.error('Error sending email:', error);
-    if (error.response) {
-      console.error(error.response.body);
-    }
+    console.error('Error sending email:', error.response?.body || error.message);
+    throw error;
   }
 };
-
-module.exports = sendEmail;
