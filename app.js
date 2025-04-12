@@ -1,8 +1,20 @@
 const express = require('express');
+const cors = require('cors');
+const bodyParser = require('body-parser');
+
+const authRoutes = require('./routes/authRoutes'); // ✅ Correct import
+
 const app = express();
-const authRoutes = require('./routes/authRoutes');
-const bepoRoutes = require('./routes/bepoRoutes');
-app.use(express.json());
+
+app.use(cors());
+app.use(bodyParser.json());
+
+// ✅ Route middleware
 app.use('/api/auth', authRoutes);
-app.use('/api/bepo', bepoRoutes);
+
+// ✅ Optional: root route
+app.get('/', (req, res) => {
+  res.send('CodeCon Backend Running');
+});
+
 module.exports = app;
