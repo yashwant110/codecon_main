@@ -1,5 +1,5 @@
 const express = require('express');
-const { getRecommendations } = require('../controllers/bepoController');
+const { getRecommendations } = require('./bepoController');
 const router = express.Router();
 
 router.post('/recommend', getRecommendations);
