@@ -1,5 +1,7 @@
 const express = require('express');
+const { getRecommendations } = require('../controllers/bepoController');
 const router = express.Router();
-const bepoController = require('../controllers/bepoController');
-router.post('/recommend', bepoController.recommend);
+
+router.post('/recommend', getRecommendations);
+
 module.exports = router;
