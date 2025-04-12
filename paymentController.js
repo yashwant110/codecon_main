@@ -1,33 +1,42 @@
 const Razorpay = require('razorpay');
-const Order = require('./Order');
+const Order = require('../models/Order');
 
 const razorpayInstance = new Razorpay({
-  key_id: process.env.Razorpay_KEY_ID,
-  key_secret: process.env.Razorpay_KEY_SECRET
+  key_id: process.env.RAZORPAY_KEY_ID,
+  key_secret: process.env.RAZORPAY_KEY_SECRET,
 });
 
-const createPaymentOrder = async (req, res) => {
+const createOrder = async (req, res) => {
   const { amount } = req.body;
   try {
-    const options = {
-      amount: amount * 100,  // Convert to paise
+    const orderOptions = {
+      amount: amount * 100,  // Amount in paise
       currency: 'INR',
-      receipt: `receipt_${Date.now()}`
+      receipt: `receipt_${Date.now()}`,
     };
 
-    razorpayInstance.orders.create(options, async (err, order) => {
+    razorpayInstance.orders.create(orderOptions, async (err, order) => {
       if (err) {
-        return res.status(500).json({ msg: "Error creating payment order" });
+        return res.status(500).json({ msg: 'Failed to create order', error: err });
       }
 
-      const newOrder = new Order({ orderId: order.id, amount, status: "created" });
+      const newOrder = new Order({
+        orderId: order.id,
+        amount: amount,
+        status: 'pending',
+      });
+
       await newOrder.save();
 
-      res.status(201).json({ order });
+      return res.status(200).json({
+        orderId: order.id,
+        amount: order.amount / 100, // convert back to rupees
+        currency: order.currency,
+      });
     });
   } catch (error) {
-    res.status(500).json({ msg: "Server Error" });
+    return res.status(500).json({ msg: 'Server Error', error });
   }
 };
 
-module.exports = { createPaymentOrder };
+module.exports = { createOrder };
