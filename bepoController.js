@@ -1,4 +1,4 @@
-const aiRecommender = require('../utils/aiRecommender');
+const aiRecommender = require('./aiRecommender');
 
 const getRecommendations = (req, res) => {
   const { userInput } = req.body;
