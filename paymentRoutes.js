@@ -1,7 +1,7 @@
 const express = require('express');
-const { createPaymentOrder } = require('./paymentController');
+const { createOrder } = require('../controllers/paymentController'); // assuming it's in the controllers directory
 const router = express.Router();
 
-router.post('/create', createPaymentOrder);
+router.post('/create-order', createOrder);
 
 module.exports = router;
