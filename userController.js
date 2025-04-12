@@ -1,4 +1,4 @@
-const User = require('../models/User');
+const User = require('./User');
 
 // Controller for updating user profile, fetching user details etc.
 const getUserProfile = async (req, res) => {
