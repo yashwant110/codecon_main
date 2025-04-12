@@ -1,31 +1,12 @@
-// utils/emailService.js
-
 const nodemailer = require('nodemailer');
-require('dotenv').config();
-
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: process.env.EMAIL_USERNAME, // your Gmail or SMTP email
-    pass: process.env.EMAIL_PASSWORD, // your App password or SMTP password
-  },
-});
-
-async function sendEmail(to, subject, text) {
-  const mailOptions = {
-    from: `"CodeCon" <${process.env.EMAIL_USERNAME}>`,
-    to,
-    subject,
-    text,
-  };
-
-  try {
-    await transporter.sendMail(mailOptions);
-    console.log(`✅ Email sent to ${to}`);
-  } catch (error) {
-    console.error(`❌ Failed to send email to ${to}`, error);
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS
   }
-}
-
-module.exports = sendEmail;
-
+});
+exports.sendEmail = async (to, subject, html) => {
+  const mailOptions = { from: process.env.EMAIL_USER, to, subject, html };
+  await transporter.sendMail(mailOptions);
+};
