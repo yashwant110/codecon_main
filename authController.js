@@ -1,7 +1,8 @@
+const User = require('./User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const User = require('./User');  // Make sure this path is correct
-const sendEmail = require('./sendEmail');  // Correctly import sendEmail if needed
+const sendEmail = require('./sendEmail');  // Ensure this is correct
+const otpGenerator = require('./otp-generator');  // Ensure the file exists
 
 const signup = async (req, res) => {
   const { email, password, name } = req.body;
@@ -50,5 +51,4 @@ const login = async (req, res) => {
   }
 };
 
-// Export functions
 module.exports = { signup, login };
