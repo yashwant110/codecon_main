@@ -1,7 +1,9 @@
-const express = require('express');
-const { createOrder } = require('../controllers/paymentController'); // assuming it's in the controllers directory
-const router = express.Router();
+// paymentRoutes.js
 
-router.post('/create-order', createOrder);
+const express = require('express');
+const router = express.Router();
+const paymentController = require('./paymentController');  // Updated import path for root directory
+
+router.post('/create-order', paymentController.createOrder);
 
 module.exports = router;
