@@ -1,17 +1,13 @@
 const express = require('express');
 const router = express.Router();
-const authController = require('../controllers/authController');
+const AuthController = require('../controllers/authController'); // adjust if needed
 
-// Send OTP to email
-router.post('/login/send-otp', authController.sendOtp);
+// Signup route
+router.post('/signup', AuthController.signup);
 
-// Verify OTP and return JWT token
-router.post('/login/verify', authController.verifyOtp);
+// Login route
+router.post('/login', AuthController.login);
 
-// Forgot password – send reset email
-router.post('/forgot-password', authController.forgotPassword);
+// Add more routes if needed (OTP login, forgot password, etc.)
 
-// Confirm payment and upgrade to premium
-router.post('/payment/confirm', authController.confirmPayment);
-
-module.exports = router;
+module.exports = router; // ✅ Correct export
