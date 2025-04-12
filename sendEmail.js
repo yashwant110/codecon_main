@@ -1,29 +1,39 @@
-// utils/sendEmail.js
+// sendEmail.js (Using Nodemailer or SendGrid)
+const nodemailer = require('nodemailer');
+const sendGridMail = require('@sendgrid/mail');
 
-const sgMail = require('./mail');
+// If using Nodemailer
+const transporter = nodemailer.createTransport({
+  service: 'gmail', // Or your preferred service
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS
+  }
+});
 
-// Set SendGrid API Key from environment variable
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+// If using SendGrid (Uncomment if using SendGrid)
+// sendGridMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-/**
- * Send an email using SendGrid
- * @param {string} to - Recipient email address
- * @param {string} subject - Email subject
- * @param {string} html - HTML content of the email
- */
+// Send an email (Nodemailer example)
+exports.sendEmail = async (to, subject, html) => {
+  const mailOptions = {
+    from: process.env.EMAIL_USER,
+    to,
+    subject,
+    html
+  };
+  await transporter.sendMail(mailOptions);  // Nodemailer
+};
+
+// Or use SendGrid to send the email
+/*
 exports.sendEmail = async (to, subject, html) => {
   const msg = {
     to,
-    from: 'your_verified_sendgrid_email@example.com', // Must be a verified sender in SendGrid
+    from: process.env.EMAIL_USER,
     subject,
-    html,
+    html
   };
-
-  try {
-    await sgMail.send(msg);
-    console.log('Email sent successfully');
-  } catch (error) {
-    console.error('Error sending email:', error.response?.body || error.message);
-    throw error;
-  }
+  await sendGridMail.send(msg); // SendGrid
 };
+*/
